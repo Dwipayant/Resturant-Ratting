@@ -1,4 +1,4 @@
-import { makeStyles, Paper } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import React from "react";
 
 import { Restaurant } from "../interfaces/restaurant";
@@ -14,10 +14,17 @@ const useStyles = makeStyles((theme) => ({
         flexWrap: 'wrap',
         '& > *': {
             margin: theme.spacing(1),
-            width: theme.spacing(16),
-            height: theme.spacing(16),
+            width: theme.spacing(45),
+            height: theme.spacing(80),
         },
     },
+    card: {
+        maxWidth: 345,
+      },
+      media: {
+        height: 140,
+      }
+    
 }));
 
 export function RestaurantList(props: RestaurantListProps) {
@@ -26,12 +33,10 @@ export function RestaurantList(props: RestaurantListProps) {
     return (
         <div className={classes.root}>
             {
-                restaurants.map((restaurant) => {
-                    <Paper elevation={5}>
-                        <RestaurantItem restaurant={restaurant} />
-                    <Paper>
-             })
-             }
+               restaurants.map((restaurant) => (
+                <RestaurantItem restaurant={restaurant} />
+             ))
+            }
         </div>
     );
 }

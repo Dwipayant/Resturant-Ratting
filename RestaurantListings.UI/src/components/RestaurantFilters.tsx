@@ -59,44 +59,44 @@ const FilterTitle = styled.h4({
     color: "#2c2c2c",
 });
 
-const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
-    //drawer: {
-    //    [theme.breakpoints.up('sm')]: {
-    //        width: drawerWidth,
-    //        flexShrink: 0,
-    //    },
-    //},
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-    },
-    menuButton: {
-        marginRight: theme.spacing(2),
-        [theme.breakpoints.up('sm')]: {
-            display: 'none',
-        },
-    },
-    toolbar: theme.mixins.toolbar,
-    //drawerPaper: {
-    //    width: drawerWidth
-    //},
-    content: {
-        flexGrow: 1,
-        padding: theme.spacing(3),
-    },
-    //closeMenuButton: {
-    //    marginRight: 'auto',
-    //    marginLeft: 0,
-    //},
-}));
+//const useStyles = makeStyles(theme => ({
+//    //root: {
+//    //    display: 'flex',
+//    //},
+//    //drawer: {
+//    //    [theme.breakpoints.up('sm')]: {
+//    //        width: drawerWidth,
+//    //        flexShrink: 0,
+//    //    },
+//    //},
+//    appBar: {
+//        zIndex: theme.zIndex.drawer + 1,
+//    },
+//    menuButton: {
+//        marginRight: theme.spacing(2),
+//        [theme.breakpoints.up('sm')]: {
+//            display: 'none',
+//        },
+//    },
+//    toolbar: theme.mixins.toolbar,
+//    //drawerPaper: {
+//    //    width: drawerWidth
+//    //},
+//    content: {
+//        flexGrow: 1,
+//        padding: theme.spacing(3),
+//    },
+//    //closeMenuButton: {
+//    //    marginRight: 'auto',
+//    //    marginLeft: 0,
+//    //},
+//}));
 
 
 
 export function RestaurantFilters(props: RestaurantFiltersProps) {
     const { tags = [], onChange } = props;
-    const classes = useStyles();
+    // const classes = useStyles();
     const [state, dispatch] = useReducer(restaurantFiltersReducer, {
         tags: [],
         isFamilyFriendly: false,
@@ -109,36 +109,34 @@ export function RestaurantFilters(props: RestaurantFiltersProps) {
 
     return (
         <React.Fragment>
-            <CssBaseline />
-            <Container maxWidth="sm">
-                <FilterGroup>
-                    <FilterTitle>Tags</FilterTitle>
+            <FilterGroup>
+                <FilterTitle>Tags</FilterTitle>
 
-                    {tags.map((tag) => (
-                        <ToggleFilter
-                            label={tag}
-                            isChecked={!!state.tags.includes(tag)}
-                            onChange={() => dispatch({ type: "toggleTag", payload: { tag } })}
-                        />
-                    ))}
-                </FilterGroup>
-
-                <FilterGroup>
-                    <FilterTitle>Other</FilterTitle>
-
+                {tags.map((tag) => (
                     <ToggleFilter
-                        label="Family friendly"
-                        isChecked={state.isFamilyFriendly}
-                        onChange={() => dispatch({ type: "toggleFamilyFriendly" })}
+                        label={tag}
+                        isChecked={!!state.tags.includes(tag)}
+                        onChange={() => dispatch({ type: "toggleTag", payload: { tag } })}
                     />
+                ))}
+            </FilterGroup>
 
-                    <ToggleFilter
-                        label="Vegan"
-                        isChecked={state.isVeganFriendly}
-                        onChange={() => dispatch({ type: "toggleVeganFriendly" })}
-                    />
-                </FilterGroup>
-            </Container>
+            <FilterGroup>
+                <FilterTitle>Other</FilterTitle>
+
+                <ToggleFilter
+                    label="Family friendly"
+                    isChecked={state.isFamilyFriendly}
+                    onChange={() => dispatch({ type: "toggleFamilyFriendly" })}
+                />
+
+                <ToggleFilter
+                    label="Vegan"
+                    isChecked={state.isVeganFriendly}
+                    onChange={() => dispatch({ type: "toggleVeganFriendly" })}
+                />
+            </FilterGroup>
+
         </React.Fragment>
     );
 }

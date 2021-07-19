@@ -14,15 +14,28 @@ import { red } from '@material-ui/core/colors';
 import  CustomizedRatings  from '../components/RatingComponent/CustomizedRatings';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import { useAuthContext } from "../auth/authContext";
 import React from "react";
+import { Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        maxWidth: 345,
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& > *': {
+            margin: theme.spacing(1),
+            width: theme.spacing(16),
+            height: theme.spacing(16),
+        },
     },
-    media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
+    card: {
+        maxWidth: 345,
+      },
+      media: {
+        height: 140,
+      },
+      avatar: {
+        backgroundColor: red[500],
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -34,10 +47,8 @@ const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
-    avatar: {
-        backgroundColor: red[500],
-    }
 }));
+
 
 export interface RestaurantItemProps {
     restaurant: Restaurant;
@@ -45,7 +56,7 @@ export interface RestaurantItemProps {
 
 export function RestaurantItem(props: RestaurantItemProps) {
     const { restaurant } = props;
-
+    const { authService } = useAuthContext();
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
@@ -53,47 +64,51 @@ export function RestaurantItem(props: RestaurantItemProps) {
         setExpanded(!expanded);
     };
     return (
-        <Card className={classes.root}>
-            <CardHeader
-                avatar={
-                    <Avatar aria-label="recipe" className={classes.avatar}>R</Avatar>
-                }
-                title={restaurant.name}
-                subheader={restaurant.phoneNumber}
-            />
-            <CardMedia
-                className={classes.media}
-                image={restaurant.photoUri}
-                title={restaurant.name}
-            />
+        <Grid container spacing={3}>
+            <Grid item xs={12}>
+                <Card className={classes.card}>
+                    <CardHeader
+                        avatar={
+                            <Avatar aria-label="recipe" className={classes.avatar} >{restaurant.name.charAt(0)}</Avatar>
+                        }
+                        title={restaurant.name}
+                        subheader={restaurant.phoneNumber}
+                    />
+                    <CardMedia
+                        className={classes.media}
+                        image={restaurant.photoUri}
+                        title={restaurant.name}
+                    />
+                    <CardContent>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            {restaurant.address}
+                        </Typography>
+                    </CardContent>
+                    <CardActions disableSpacing>
+                        <IconButton aria-label="add to favorites">
+                            {authService._isAuthenticated && <CustomizedRatings restaurantName={restaurant.name}/>}
+                        </IconButton>
+                        <IconButton
+                            className={clsx(classes.expand, {
+                                [classes.expandOpen]: expanded,
+                            })}
+                            onClick={handleExpandClick}
+                            aria-expanded={expanded}
+                            aria-label="show more"
+                        >
+                            <ExpandMoreIcon />
+                        </IconButton>
+                    </CardActions>
+                    <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-                <Typography variant="body2" color="textSecondary" component="p">
-                    {restaurant.address}
-        </Typography>
+                <Typography paragraph>
+                    {restaurant.description}
+                </Typography>
+                
             </CardContent>
-            <CardActions disableSpacing>
-                <IconButton aria-label="add to favorites">
-                    <CustomizedRatings restaurantName={restaurant.name}/>
-                </IconButton>
-                <IconButton
-                    className={clsx(classes.expand, {
-                        [classes.expandOpen]: expanded,
-                    })}
-                    onClick={handleExpandClick}
-                    aria-expanded={expanded}
-                    aria-label="show more"
-                >
-                    <ExpandMoreIcon />
-                </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <CardContent>
-                    <Typography paragraph>
-                        {restaurant.description}
-          </Typography>
-                    
-                </CardContent>
-            </Collapse>
-        </Card>
+        </Collapse>
+                </Card>
+            </Grid>
+        </Grid>
     );
 }
